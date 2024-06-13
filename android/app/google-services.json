@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17666642853",
+    "project_id": "om-mcms-app",
+    "storage_bucket": "om-mcms-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17666642853:android:0c657e79a1f5d037a08e4c",
+        "android_client_info": {
+          "package_name": "com.example.my_mcms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0IPQr37Siy_KrHEExhQyRgZFNbhNaZBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
