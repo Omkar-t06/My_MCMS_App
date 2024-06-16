@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
+import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/views/registration_view.dart';
-import 'package:my_mcms/widgets/auth_textfield.dart';
-import 'package:my_mcms/widgets/custom_appbar.dart';
-import 'package:my_mcms/widgets/title_text.dart';
+import 'package:my_mcms/utils/widgets/auth_textfield.dart';
+import 'package:my_mcms/utils/widgets/custom_appbar.dart';
+import 'package:my_mcms/utils/widgets/title_text.dart';
 
 class LoginView extends StatefulWidget {
   static const String route = '/login';
@@ -28,6 +29,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.background,
       appBar: customAppBar(titleText: "Login"),
       body: Column(
         children: [
@@ -42,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Card(
-              color: ColorPalette.background,
+              color: ColorPalette.backgroundVariance,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -70,14 +72,7 @@ class _LoginViewState extends State<LoginView> {
                           password: _passwordController.text,
                         );
                       },
-                      child: const Text(
-                        "Log In",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      child: const Text("Log In", style: buttonTextStyle),
                     ),
                     TextButton(
                       onPressed: () {
@@ -89,11 +84,7 @@ class _LoginViewState extends State<LoginView> {
                       },
                       child: const Text(
                         "Register Here!!",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: buttonTextStyle,
                       ),
                     ),
                   ],

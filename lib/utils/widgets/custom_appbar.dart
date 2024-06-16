@@ -6,10 +6,10 @@ customAppBar({required String titleText}) {
     title: Text(
       titleText,
       style: const TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontWeight: FontWeight.w500,
       ),
     ),
-    backgroundColor: ColorPalette.primary,
+    backgroundColor: ColorPalette.navBarColor,
   );
 }

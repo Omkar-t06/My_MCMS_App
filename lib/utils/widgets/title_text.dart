@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_mcms/constants/text_style.dart';
 
 class TitleText extends StatelessWidget {
   final String data;
@@ -9,10 +10,7 @@ class TitleText extends StatelessWidget {
     return Text(
       data,
       textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-      ),
+      style: titleTextStyle,
     );
   }
 }

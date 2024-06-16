@@ -1,10 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
+import 'package:my_mcms/constants/text_style.dart';
+import 'package:my_mcms/utils/message_widget/show_otp_dialog.dart';
+import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
 import 'package:my_mcms/views/login_view.dart';
-import 'package:my_mcms/widgets/auth_textfield.dart';
-import 'package:my_mcms/widgets/custom_appbar.dart';
-import 'package:my_mcms/widgets/title_text.dart';
+import 'package:my_mcms/utils/widgets/auth_textfield.dart';
+import 'package:my_mcms/utils/widgets/custom_appbar.dart';
+import 'package:my_mcms/utils/widgets/title_text.dart';
 
 enum RegistrationOptions { email, phoneNo }
 
@@ -36,10 +41,42 @@ class _RegistrationViewState extends State<RegistrationView> {
     });
   }
 
+  Future<void> phoneSignIn(BuildContext context, String phoneNo) async {
+    TextEditingController codeController = TextEditingController();
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNo,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      },
+      verificationFailed: (e) {
+        showSnackBar(
+          context,
+          e.message ?? 'An error occurred. Please try again later.',
+        );
+      },
+      codeSent: ((String verificationId, int? refreshToken) {
+        showOTPDialog(
+          context: context,
+          controller: codeController,
+          onPressed: () async {
+            PhoneAuthCredential credentials = PhoneAuthProvider.credential(
+              verificationId: verificationId,
+              smsCode: codeController.text.trim(),
+            );
+            await FirebaseAuth.instance.signInWithCredential(credentials);
+            Navigator.of(context).pop();
+          },
+        );
+      }),
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: ColorPalette.background,
       appBar: customAppBar(titleText: "Registration"),
       body: Column(
         children: [
@@ -49,7 +86,7 @@ class _RegistrationViewState extends State<RegistrationView> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Card(
-              color: ColorPalette.background,
+              color: ColorPalette.backgroundVariance,
               child: Column(
                 children: [
                   const Text("Register Using:"),
@@ -86,14 +123,14 @@ class _RegistrationViewState extends State<RegistrationView> {
           Container(
             padding: const EdgeInsets.all(8.0),
             child: Card(
-              color: ColorPalette.background,
+              color: ColorPalette.backgroundVariance,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     if (_options == RegistrationOptions.phoneNo)
                       IdCredencialTextField(
-                        controller: _emailController,
+                        controller: _phoneController,
                         keyboardType: TextInputType.phone,
                         hintText: 'Enter your phone number',
                         label: 'Phone Number',
@@ -125,21 +162,15 @@ class _RegistrationViewState extends State<RegistrationView> {
                             password: _passwordController.text,
                           );
                         } else {
-                          try {} catch (e) {
-                            SnackBar(
-                              content: Text(e.toString()),
-                            );
+                          try {
+                            await phoneSignIn(
+                                context, _phoneController.text.trim());
+                          } catch (e) {
+                            showSnackBar(context, e.toString());
                           }
                         }
                       },
-                      child: const Text(
-                        "Register",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      child: const Text("Register", style: buttonTextStyle),
                     ),
                     TextButton(
                       onPressed: () {
@@ -151,11 +182,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                       },
                       child: const Text(
                         "Already Registered? Login Here",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: buttonTextStyle,
                       ),
                     ),
                   ],
