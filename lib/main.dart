@@ -1,16 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
 import 'package:my_mcms/constants/router.dart';
+import 'package:my_mcms/firebase_options.dart';
 import 'package:my_mcms/views/registration_view.dart';
 
-void main() {
+void main() async {
+  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +23,23 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: const RegistrationView(),
+      home: FutureBuilder(
+        future: Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        ),
+        builder: (BuildContext context, AsyncSnapshot<FirebaseApp> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              return const RegistrationView();
+            default:
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+          }
+        },
+      ),
     );
   }
 }
