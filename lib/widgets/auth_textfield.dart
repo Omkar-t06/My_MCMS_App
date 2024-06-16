@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 
-class EmailTextField extends StatefulWidget {
+class IdCredencialTextField extends StatefulWidget {
   final TextEditingController controller;
-  const EmailTextField({super.key, required this.controller});
+  final TextInputType keyboardType;
+  final String hintText;
+  final String label;
+  final Icon icon;
+  const IdCredencialTextField({
+    super.key,
+    required this.controller,
+    required this.keyboardType,
+    required this.hintText,
+    required this.label,
+    required this.icon,
+  });
 
   @override
-  State<EmailTextField> createState() => _EmailTextFieldState();
+  State<IdCredencialTextField> createState() => _IdCredencialTextFieldState();
 }
 
-class _EmailTextFieldState extends State<EmailTextField> {
+class _IdCredencialTextFieldState extends State<IdCredencialTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.email_rounded),
-        label: Text("Email"),
-        hintText: "Enter Your Email",
+      decoration: InputDecoration(
+        prefixIcon: widget.icon,
+        label: Text(widget.label),
+        hintText: widget.hintText,
         filled: true,
       ),
       textInputAction: TextInputAction.next,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: widget.keyboardType,
       autocorrect: false,
       controller: widget.controller,
     );

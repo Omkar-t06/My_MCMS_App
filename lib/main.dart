@@ -6,8 +6,8 @@ import 'package:my_mcms/firebase_options.dart';
 import 'package:my_mcms/views/registration_view.dart';
 
 void main() async {
-  // await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
