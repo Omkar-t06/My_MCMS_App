@@ -81,7 +81,8 @@ class _RegistrationViewState extends State<RegistrationView> {
       body: Column(
         children: [
           const TitleText(
-              data: "Welcome To Municipal Corporation Complaint System"),
+            data: "Welcome To Municipal Corporation Complaint System",
+          ),
           const Text("Please Register Yourself"),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -144,12 +145,14 @@ class _RegistrationViewState extends State<RegistrationView> {
                         label: 'Email',
                         icon: const Icon(Icons.email),
                       ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    PasswordTextField(
-                      controller: _passwordController,
-                    ),
+                    if (_options == RegistrationOptions.email)
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    if (_options == RegistrationOptions.email)
+                      PasswordTextField(
+                        controller: _passwordController,
+                      ),
                     const SizedBox(
                       height: 10,
                     ),
