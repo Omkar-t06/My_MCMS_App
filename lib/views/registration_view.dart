@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
+import 'package:my_mcms/constants/enums.dart';
 import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/utils/message_widget/show_otp_dialog.dart';
 import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
@@ -10,8 +11,7 @@ import 'package:my_mcms/views/login_view.dart';
 import 'package:my_mcms/utils/widgets/auth_textfield.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
 import 'package:my_mcms/utils/widgets/title_text.dart';
-
-enum RegistrationOptions { email, phoneNo }
+import 'package:my_mcms/views/verify_email.dart';
 
 class RegistrationView extends StatefulWidget {
   static const String route = '/registration';
@@ -41,7 +41,15 @@ class _RegistrationViewState extends State<RegistrationView> {
     });
   }
 
-  Future<void> phoneSignIn(BuildContext context, String phoneNo) async {
+  void phoneSign() async {
+    try {
+      await phoneSignInService(context, _phoneController.text.trim());
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<void> phoneSignInService(BuildContext context, String phoneNo) async {
     TextEditingController codeController = TextEditingController();
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNo,
@@ -85,7 +93,10 @@ class _RegistrationViewState extends State<RegistrationView> {
           ),
           const Text("Please Register Yourself"),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(
+              left: 8.0,
+              right: 8.0,
+            ),
             child: Card(
               color: ColorPalette.backgroundVariance,
               child: Column(
@@ -105,7 +116,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                         ),
                       ),
                       SizedBox(
-                        width: currentWidth * 0.4,
+                        width: currentWidth * 0.45,
                         child: ListTile(
                           title: const Text("Email"),
                           leading: Radio<RegistrationOptions>(
@@ -121,12 +132,12 @@ class _RegistrationViewState extends State<RegistrationView> {
               ),
             ),
           ),
-          Container(
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: Card(
               color: ColorPalette.backgroundVariance,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                 child: Column(
                   children: [
                     if (_options == RegistrationOptions.phoneNo)
@@ -138,39 +149,42 @@ class _RegistrationViewState extends State<RegistrationView> {
                         icon: const Icon(Icons.phone),
                       ),
                     if (_options == RegistrationOptions.email)
-                      IdCredencialTextField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        hintText: 'Enter your email',
-                        label: 'Email',
-                        icon: const Icon(Icons.email),
+                      Column(
+                        children: [
+                          IdCredencialTextField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            hintText: 'Enter your email',
+                            label: 'Email',
+                            icon: const Icon(Icons.email),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PasswordTextField(
+                            controller: _passwordController,
+                          ),
+                        ],
                       ),
-                    if (_options == RegistrationOptions.email)
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    if (_options == RegistrationOptions.email)
-                      PasswordTextField(
-                        controller: _passwordController,
-                      ),
-                    const SizedBox(
-                      height: 10,
-                    ),
                     TextButton(
                       onPressed: () async {
                         if (_options == RegistrationOptions.email) {
-                          await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          );
-                        } else {
                           try {
-                            await phoneSignIn(
-                                context, _phoneController.text.trim());
+                            await FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            );
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              VerifyEmail.route,
+                              (route) => false,
+                            );
                           } catch (e) {
                             showSnackBar(context, e.toString());
                           }
+                        } else {
+                          phoneSign();
                         }
                       },
                       child: const Text("Register", style: buttonTextStyle),

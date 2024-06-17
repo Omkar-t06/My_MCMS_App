@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
 import 'package:my_mcms/constants/text_style.dart';
+import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
 import 'package:my_mcms/views/registration_view.dart';
 import 'package:my_mcms/utils/widgets/auth_textfield.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
@@ -67,10 +70,15 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        );
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                        } catch (e) {
+                          showSnackBar(context, e.toString());
+                        }
                       },
                       child: const Text("Log In", style: buttonTextStyle),
                     ),

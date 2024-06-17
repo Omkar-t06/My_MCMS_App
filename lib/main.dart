@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
 import 'package:my_mcms/constants/router.dart';
 import 'package:my_mcms/firebase_options.dart';
+import 'package:my_mcms/utils/message_widget/loader.dart';
 import 'package:my_mcms/views/login_view.dart';
 import 'package:my_mcms/views/registration_view.dart';
 import 'package:my_mcms/views/verify_email.dart';
@@ -54,11 +55,7 @@ class HomePage extends StatelessWidget {
               return const LoginView();
             }
           default:
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+            return const Loader();
         }
       },
     );

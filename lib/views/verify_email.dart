@@ -20,15 +20,20 @@ class _VerifyEmailState extends State<VerifyEmail> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const TitleText(data: "Please verify your email address"),
-          const Text("A verification link has been sent to your email address"),
+          const TitleText(
+            data:
+                "We've sent a verification email please check it and verify yourself",
+          ),
+          const Text(
+            "If you haven't received a verification email click below",
+          ),
           TextButton(
             onPressed: () async {
               final user = FirebaseAuth.instance.currentUser;
               await user?.sendEmailVerification();
             },
             child: const Text(
-              "Resend Verification Email",
+              "Send Verification Email",
               style: buttonTextStyle,
             ),
           ),

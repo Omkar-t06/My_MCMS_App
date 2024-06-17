@@ -1,0 +1,1 @@
+enum RegistrationOptions { email, phoneNo }
