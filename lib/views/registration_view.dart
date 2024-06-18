@@ -175,6 +175,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                               email: _emailController.text,
                               password: _passwordController.text,
                             );
+
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               VerifyEmail.route,

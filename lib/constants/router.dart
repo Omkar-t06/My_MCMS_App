@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_mcms/views/client_views/client_home_view.dart';
 import 'package:my_mcms/views/login_view.dart';
 import 'package:my_mcms/views/registration_view.dart';
 import 'package:my_mcms/views/verify_email.dart';
@@ -19,6 +20,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) => const VerifyEmail(),
+      );
+    case ClientHomeView.route:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) => const ClientHomeView(),
       );
     default:
       return MaterialPageRoute(

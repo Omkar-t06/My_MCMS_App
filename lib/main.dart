@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: const HomePage(),
+      home: const ViewBuilder(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class ViewBuilder extends StatelessWidget {
+  const ViewBuilder({super.key});
 
   @override
   Widget build(BuildContext context) {
