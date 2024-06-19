@@ -86,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
     var currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: ColorPalette.background,
-      appBar: customAppBar(titleText: "Login"),
+      appBar: customAuthAppBar(titleText: "Login"),
       body: Column(
         children: [
           const Column(
@@ -175,13 +175,14 @@ class _LoginViewState extends State<LoginView> {
                       onPressed: () async {
                         if (_options == RegistrationOptions.email) {
                           try {
-                            final user = await FirebaseAuth.instance
+                            await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                               email: _emailController.text,
                               password: _passwordController.text,
                             );
-                            if (user.user!.emailVerified == false) {
-                              await user.user!.sendEmailVerification();
+                            final user = FirebaseAuth.instance.currentUser;
+                            if (user?.emailVerified == false) {
+                              await user?.sendEmailVerification();
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 VerifyEmail.route,
@@ -199,6 +200,8 @@ class _LoginViewState extends State<LoginView> {
                           }
                         } else {
                           phoneSign();
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              ClientHomeView.route, (_) => false);
                         }
                       },
                       child: const Text("Log In", style: buttonTextStyle),

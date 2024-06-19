@@ -10,3 +10,13 @@ const TextStyle buttonTextStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.w400,
 );
+
+const TextStyle messageTextStyle = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w400,
+);
+
+const TextStyle appBarTextStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.w500,
+);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
 import 'package:my_mcms/utils/widgets/title_text.dart';
+import 'package:my_mcms/views/login_view.dart';
 
 class VerifyEmail extends StatefulWidget {
   static const String route = '/verify-email';
@@ -16,7 +17,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(titleText: "Verify Email"),
+      appBar: customAuthAppBar(titleText: "Verify Email"),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -26,6 +27,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           ),
           const Text(
             "If you haven't received a verification email click below",
+            style: messageTextStyle,
           ),
           TextButton(
             onPressed: () async {
@@ -37,6 +39,22 @@ class _VerifyEmailState extends State<VerifyEmail> {
               style: buttonTextStyle,
             ),
           ),
+          const Text(
+            "Once you verify yourself please Login here:-",
+            style: messageTextStyle,
+          ),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  LoginView.route,
+                  (_) => false,
+                );
+              },
+              child: const Text(
+                "Restart",
+                style: buttonTextStyle,
+              ))
         ],
       ),
     );

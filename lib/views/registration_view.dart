@@ -7,6 +7,7 @@ import 'package:my_mcms/constants/enums.dart';
 import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/utils/message_widget/show_otp_dialog.dart';
 import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
+import 'package:my_mcms/views/client_views/client_home_view.dart';
 import 'package:my_mcms/views/login_view.dart';
 import 'package:my_mcms/utils/widgets/auth_textfield.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
@@ -85,7 +86,7 @@ class _RegistrationViewState extends State<RegistrationView> {
     var currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: ColorPalette.background,
-      appBar: customAppBar(titleText: "Registration"),
+      appBar: customAuthAppBar(titleText: "Registration"),
       body: Column(
         children: [
           const TitleText(
@@ -170,12 +171,12 @@ class _RegistrationViewState extends State<RegistrationView> {
                       onPressed: () async {
                         if (_options == RegistrationOptions.email) {
                           try {
-                            await FirebaseAuth.instance
+                            final userCred = await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
                               email: _emailController.text,
                               password: _passwordController.text,
                             );
-
+                            userCred.user!.sendEmailVerification();
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               VerifyEmail.route,
@@ -186,6 +187,8 @@ class _RegistrationViewState extends State<RegistrationView> {
                           }
                         } else {
                           phoneSign();
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              ClientHomeView.route, (_) => false);
                         }
                       },
                       child: const Text("Register", style: buttonTextStyle),
