@@ -18,6 +18,8 @@ abstract class AuthProvider {
 
   Future<void> sendEmailVerification();
 
+  Future<void> sendPasswordReset({required String toEmail});
+
   // Phone No. Auth Service Methods
   Future<void> sendOtpToPhone({required String phoneNo});
 
