@@ -1,6 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/text_style.dart';
+import 'package:my_mcms/service/auth/auth_expections.dart';
+import 'package:my_mcms/service/auth/auth_service.dart';
+import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
 import 'package:my_mcms/utils/widgets/title_text.dart';
 import 'package:my_mcms/views/login_view.dart';
@@ -31,8 +35,13 @@ class _VerifyEmailState extends State<VerifyEmail> {
           ),
           TextButton(
             onPressed: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              await user?.sendEmailVerification();
+              try {
+                await AuthService.firebase().sendEmailVerification();
+              } on InvalidEmailException catch (_) {
+                showSnackBar(context, "Invalid Email Address");
+              } on GenericException catch (_) {
+                showSnackBar(context, "Error Sending Email");
+              }
             },
             child: const Text(
               "Send Verification Email",
@@ -44,7 +53,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
             style: messageTextStyle,
           ),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
+                await AuthService.firebase().logOut();
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   LoginView.route,

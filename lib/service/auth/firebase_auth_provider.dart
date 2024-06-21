@@ -1,16 +1,31 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/widgets.dart'
+    show BuildContext, Navigator, TextEditingController;
+import 'package:my_mcms/firebase_options.dart';
 import 'package:my_mcms/service/auth/auth_user.dart';
 import 'package:my_mcms/service/auth/auth_provider.dart';
 import 'package:my_mcms/service/auth/auth_expections.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show
+        ConfirmationResult,
         FirebaseAuth,
         FirebaseAuthException,
         PhoneAuthCredential,
         PhoneAuthProvider;
+import 'package:my_mcms/utils/message_widget/show_otp_dialog.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
   final _firebase = FirebaseAuth.instance;
-  late String _verificationId;
+
+  @override
+  Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
 
   @override
   Future<AuthUser?> createUser({
@@ -47,7 +62,7 @@ class FirebaseAuthProvider implements AuthProvider {
   AuthUser? get currentUser {
     final user = _firebase.currentUser;
     if (user != null) {
-      return AuthUser.fromFirbase(user);
+      return AuthUser.fromFirebase(user);
     } else {
       return null;
     }
@@ -103,67 +118,6 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<void> sendOtpToPhone({required String phoneNo}) async {
-    try {
-      await _firebase.verifyPhoneNumber(
-        phoneNumber: phoneNo,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await _firebase.signInWithCredential(credential);
-        },
-        verificationFailed: (e) {
-          if (e.code == 'invalid-phone-number') {
-            throw InvalidPhoneNumberException();
-          } else if (e.code == 'invalid-verification-code') {
-            throw InvalidVerificationCodeException();
-          } else if (e.code == 'network-request-failed') {
-            throw NetworkRequestFailureException();
-          } else {
-            throw GenericException();
-          }
-        },
-        codeSent: (String verificationId, int? refreshToken) {
-          _verificationId = verificationId;
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          _verificationId = verificationId;
-        },
-      );
-    } catch (e) {
-      throw GenericException();
-    }
-  }
-
-  @override
-  Future<AuthUser?> verifyOtp(
-      {required String phoneNo, required String otp}) async {
-    try {
-      final userCredential = PhoneAuthProvider.credential(
-        verificationId: _verificationId,
-        smsCode: otp,
-      );
-      await _firebase.signInWithCredential(userCredential);
-      final user = currentUser;
-      if (user != null) {
-        return user;
-      } else {
-        throw UserNotLoggedInAuthExpection();
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'invalid-phone-number') {
-        throw InvalidPhoneNumberException();
-      } else if (e.code == 'invalid-verification-code') {
-        throw InvalidVerificationCodeException();
-      } else if (e.code == 'network-request-failed') {
-        throw NetworkRequestFailureException();
-      } else {
-        throw GenericException();
-      }
-    } catch (_) {
-      throw GenericException();
-    }
-  }
-
-  @override
   Future<void> sendPasswordReset({required String toEmail}) {
     try {
       return _firebase.sendPasswordResetEmail(email: toEmail);
@@ -177,6 +131,72 @@ class FirebaseAuthProvider implements AuthProvider {
           throw GenericException();
       }
     } catch (_) {
+      throw GenericException();
+    }
+  }
+
+  @override
+  Future<void> phoneSignInService(
+    BuildContext context,
+    String phoneNumber,
+  ) async {
+    try {
+      TextEditingController codeController = TextEditingController();
+      if (kIsWeb) {
+        ConfirmationResult res =
+            await _firebase.signInWithPhoneNumber(phoneNumber);
+        showOTPDialog(
+          context: context,
+          controller: codeController,
+          onPressed: () async {
+            PhoneAuthCredential credentials = PhoneAuthProvider.credential(
+              verificationId: res.verificationId,
+              smsCode: codeController.text.trim(),
+            );
+            await FirebaseAuth.instance.signInWithCredential(credentials);
+            Navigator.of(context).pop();
+          },
+        );
+      } else {
+        await _firebase.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await FirebaseAuth.instance.signInWithCredential(credential);
+          },
+          verificationFailed: (e) {
+            if (e.code == "invalid-phone-number") {
+              throw InvalidPhoneNumberException();
+            } else if (e.code == "invaild-verification-code") {
+              throw InvalidEmailException();
+            } else if (e.code == "network-request-failed") {
+              throw NetworkRequestFailureException();
+            } else {
+              throw GenericException();
+            }
+          },
+          codeSent: ((String verificationId, int? refreshToken) {
+            try {
+              showOTPDialog(
+                context: context,
+                controller: codeController,
+                onPressed: () async {
+                  PhoneAuthCredential credentials =
+                      PhoneAuthProvider.credential(
+                    verificationId: verificationId,
+                    smsCode: codeController.text.trim(),
+                  );
+                  await FirebaseAuth.instance.signInWithCredential(credentials);
+                  Navigator.of(context).pop();
+                },
+              );
+            } catch (e) {
+              throw GenericException();
+            }
+          }),
+          codeAutoRetrievalTimeout: (String verificationId) {},
+        );
+      }
+    } catch (e) {
       throw GenericException();
     }
   }

@@ -1,9 +1,15 @@
 import 'package:my_mcms/service/auth/auth_user.dart';
 import 'package:my_mcms/service/auth/auth_provider.dart';
+import 'package:my_mcms/service/auth/firebase_auth_provider.dart';
 
 class AuthService implements AuthProvider {
   final AuthProvider provider;
   const AuthService(this.provider);
+
+  factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
+
+  @override
+  Future<void> initialize() => provider.initialize();
 
   @override
   Future<AuthUser?> createUser({
@@ -35,14 +41,10 @@ class AuthService implements AuthProvider {
   Future<void> sendEmailVerification() => provider.sendEmailVerification();
 
   @override
-  Future<void> sendOtpToPhone({required String phoneNo}) =>
-      provider.sendOtpToPhone(phoneNo: phoneNo);
-
-  @override
-  Future<AuthUser?> verifyOtp({required String phoneNo, required String otp}) =>
-      provider.verifyOtp(phoneNo: phoneNo, otp: otp);
-
-  @override
   Future<void> sendPasswordReset({required String toEmail}) =>
       provider.sendPasswordReset(toEmail: toEmail);
+
+  @override
+  Future<void> phoneSignInService(context, String phoneNo) =>
+      provider.phoneSignInService(context, phoneNo);
 }

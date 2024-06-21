@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
 import 'package:my_mcms/constants/enums.dart';
 import 'package:my_mcms/constants/text_style.dart';
-import 'package:my_mcms/utils/message_widget/show_otp_dialog.dart';
+import 'package:my_mcms/service/auth/auth_expections.dart';
+import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
 import 'package:my_mcms/views/client_views/client_home_view.dart';
 import 'package:my_mcms/views/login_view.dart';
@@ -40,45 +40,6 @@ class _RegistrationViewState extends State<RegistrationView> {
     setState(() {
       _options = value!;
     });
-  }
-
-  void phoneSign() async {
-    try {
-      await phoneSignInService(context, _phoneController.text.trim());
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-  }
-
-  Future<void> phoneSignInService(BuildContext context, String phoneNo) async {
-    TextEditingController codeController = TextEditingController();
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneNo,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-      },
-      verificationFailed: (e) {
-        showSnackBar(
-          context,
-          e.message ?? 'An error occurred. Please try again later.',
-        );
-      },
-      codeSent: ((String verificationId, int? refreshToken) {
-        showOTPDialog(
-          context: context,
-          controller: codeController,
-          onPressed: () async {
-            PhoneAuthCredential credentials = PhoneAuthProvider.credential(
-              verificationId: verificationId,
-              smsCode: codeController.text.trim(),
-            );
-            await FirebaseAuth.instance.signInWithCredential(credentials);
-            Navigator.of(context).pop();
-          },
-        );
-      }),
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
   }
 
   @override
@@ -171,24 +132,54 @@ class _RegistrationViewState extends State<RegistrationView> {
                       onPressed: () async {
                         if (_options == RegistrationOptions.email) {
                           try {
-                            final userCred = await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
+                            await AuthService.firebase().createUser(
                               email: _emailController.text,
                               password: _passwordController.text,
                             );
-                            userCred.user!.sendEmailVerification();
+                            AuthService.firebase().sendEmailVerification();
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               VerifyEmail.route,
                               (route) => false,
                             );
-                          } catch (e) {
-                            showSnackBar(context, e.toString());
+                          } on EmailAlreadyInUseException catch (_) {
+                            showSnackBar(context, "Email Already In Use");
+                          } on InvalidEmailException catch (_) {
+                            showSnackBar(context, "Invalid Email");
+                          } on WeakPasswordException catch (_) {
+                            showSnackBar(context, "Weak Password");
+                          } on GenericException catch (_) {
+                            showSnackBar(context, "Authentication Error");
                           }
                         } else {
-                          phoneSign();
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              ClientHomeView.route, (_) => false);
+                          try {
+                            final phoneNumber =
+                                _phoneController.text.startsWith("+91")
+                                    ? _phoneController.text
+                                    : "+91${_phoneController.text}";
+                            await AuthService.firebase().phoneSignInService(
+                              context,
+                              phoneNumber,
+                            );
+                            final user = AuthService.firebase().currentUser;
+                            if (user == null) {
+                              showSnackBar(
+                                context,
+                                "Verify with OTP and click Login again",
+                              );
+                            } else {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                ClientHomeView.route,
+                                (_) => false,
+                              );
+                            }
+                          } on InvalidPhoneNumberException catch (_) {
+                            showSnackBar(context, "Invaid Phone Number");
+                          } on NetworkRequestFailureException catch (_) {
+                            showSnackBar(context, "Network Error");
+                          } on GenericException catch (_) {
+                            showSnackBar(context, "Authentication Error");
+                          }
                         }
                       },
                       child: const Text("Register", style: buttonTextStyle),

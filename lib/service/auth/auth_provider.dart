@@ -1,6 +1,9 @@
+import 'package:flutter/widgets.dart' show BuildContext;
 import 'package:my_mcms/service/auth/auth_user.dart';
 
 abstract class AuthProvider {
+  Future<void> initialize();
+
   AuthUser? get currentUser;
 
   // Email Auth Service Methods
@@ -21,10 +24,5 @@ abstract class AuthProvider {
   Future<void> sendPasswordReset({required String toEmail});
 
   // Phone No. Auth Service Methods
-  Future<void> sendOtpToPhone({required String phoneNo});
-
-  Future<AuthUser?> verifyOtp({
-    required String phoneNo,
-    required String otp,
-  });
+  Future<void> phoneSignInService(BuildContext context, String phoneNo);
 }

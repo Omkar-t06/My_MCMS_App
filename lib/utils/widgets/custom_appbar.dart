@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
 import 'package:my_mcms/constants/enums.dart';
 import 'package:my_mcms/constants/text_style.dart';
+import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/show_log_out_dialog.dart';
+import 'package:my_mcms/views/login_view.dart';
 
 AppBar customAuthAppBar({required String titleText}) {
   return AppBar(
@@ -40,9 +41,9 @@ AppBar customViewAppBar({
         onSelected: (value) async {
           final shouldLogOut = await showLogOutDialog(context);
           if (shouldLogOut ?? false) {
-            await FirebaseAuth.instance.signOut();
+            await AuthService.firebase().logOut();
             Navigator.of(context)
-                .pushNamedAndRemoveUntil('/login', (route) => false);
+                .pushNamedAndRemoveUntil(LoginView.route, (route) => false);
           }
         },
       )

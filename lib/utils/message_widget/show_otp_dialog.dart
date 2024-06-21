@@ -17,13 +17,14 @@ void showOTPDialog({
         children: [
           TextField(
             controller: controller,
+            keyboardType: TextInputType.number,
           )
         ],
       ),
       actions: [
         TextButton(
           onPressed: onPressed,
-          child: const Text("Done", style: buttonTextStyle),
+          child: const Text("Verify", style: buttonTextStyle),
         )
       ],
     ),

@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
 import 'package:my_mcms/constants/router.dart';
 import 'package:my_mcms/firebase_options.dart';
+import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/loader.dart';
 import 'package:my_mcms/views/client_views/client_home_view.dart';
 import 'package:my_mcms/views/login_view.dart';
@@ -40,13 +40,12 @@ class ViewBuilder extends StatelessWidget {
       future: Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       ),
-      builder: (BuildContext context, AsyncSnapshot<FirebaseApp> snapshot) {
+      builder: (BuildContext context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            final user = FirebaseAuth.instance.currentUser;
-            // print(user);
+            final user = AuthService.firebase().currentUser;
             if (user != null) {
-              if (user.phoneNumber == "" && user.emailVerified == false) {
+              if (user.phoneNumber == "" && user.isEmailVerified == false) {
                 return const VerifyEmail();
               } else {
                 return const ClientHomeView();
