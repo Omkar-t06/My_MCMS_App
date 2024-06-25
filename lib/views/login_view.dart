@@ -7,6 +7,7 @@ import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/service/auth/auth_expections.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
+import 'package:my_mcms/utils/widgets/vertical_space.dart';
 import 'package:my_mcms/views/client_views/client_home_view.dart';
 import 'package:my_mcms/views/registration_view.dart';
 import 'package:my_mcms/utils/widgets/auth_textfield.dart';
@@ -124,9 +125,7 @@ class _LoginViewState extends State<LoginView> {
                             label: 'Email',
                             icon: const Icon(Icons.email),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          verticalSpace(5),
                           PasswordTextField(
                             controller: _passwordController,
                           ),
@@ -159,7 +158,7 @@ class _LoginViewState extends State<LoginView> {
                           } on UserNotFoundException catch (_) {
                             showSnackBar(context, "User not found");
                           } on WrongPasswordException catch (_) {
-                            showSnackBar(context, "Wrong Password");
+                            showSnackBar(context, "Wrong Credenials");
                           } on GenericException catch (_) {
                             showSnackBar(context, "Authentication Error");
                           }

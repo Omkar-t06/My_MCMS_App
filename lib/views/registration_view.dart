@@ -7,6 +7,7 @@ import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/service/auth/auth_expections.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
+import 'package:my_mcms/utils/widgets/vertical_space.dart';
 import 'package:my_mcms/views/client_views/client_home_view.dart';
 import 'package:my_mcms/views/login_view.dart';
 import 'package:my_mcms/utils/widgets/auth_textfield.dart';
@@ -120,9 +121,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                             label: 'Email',
                             icon: const Icon(Icons.email),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          verticalSpace(5),
                           PasswordTextField(
                             controller: _passwordController,
                           ),

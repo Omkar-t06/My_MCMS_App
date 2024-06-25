@@ -5,6 +5,11 @@ const TextStyle titleTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+const TextStyle subTitleTextStyle = TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.w500,
+);
+
 const TextStyle buttonTextStyle = TextStyle(
   color: Colors.blue,
   fontSize: 20,
