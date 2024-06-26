@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
 import 'package:my_mcms/utils/widgets/title_text.dart';
 import 'package:my_mcms/utils/widgets/vertical_space.dart';
-import 'package:my_mcms/views/client_views/widgets/weather_slides.dart';
+import 'package:my_mcms/views/client_views/widgets/weather_utils/weather_slides.dart';
 
 class ClientHomeView extends StatelessWidget {
   static const String route = '/client-home';

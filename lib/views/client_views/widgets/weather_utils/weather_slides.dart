@@ -5,8 +5,8 @@ import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/service/weather/weather_service.dart';
 import 'package:my_mcms/utils/message_widget/loader.dart';
 import 'package:my_mcms/utils/widgets/vertical_space.dart';
-import 'package:my_mcms/views/client_views/widgets/hourly_forecast_card.dart';
-import 'package:my_mcms/views/client_views/widgets/weather_icondata.dart';
+import 'package:my_mcms/views/client_views/widgets/weather_utils/hourly_forecast_card.dart';
+import 'package:my_mcms/views/client_views/widgets/weather_utils/weather_icondata.dart';
 
 class WeatherSlide extends StatefulWidget {
   const WeatherSlide({super.key});
