@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_mcms/constants/colors.dart';
 import 'package:my_mcms/constants/router.dart';
 import 'package:my_mcms/firebase_options.dart';
@@ -9,8 +10,9 @@ import 'package:my_mcms/views/client_views/client_home_view.dart';
 import 'package:my_mcms/views/login_view.dart';
 import 'package:my_mcms/views/verify_email.dart';
 
-void main() {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

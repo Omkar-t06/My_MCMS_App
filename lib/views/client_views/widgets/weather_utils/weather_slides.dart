@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mcms/constants/colors.dart';
@@ -16,13 +17,15 @@ class WeatherSlide extends StatefulWidget {
 }
 
 class _WeatherSlideState extends State<WeatherSlide> {
-  final _weatherService =
-      WeatherService(apiKey: "ccd5734b141462c46b171fd63a3f7282");
+  late String _weatherApiKey;
+  late WeatherService _weatherService;
   late Future<Map<String, dynamic>> _weather;
 
   @override
   void initState() {
     super.initState();
+    _weatherApiKey = dotenv.env['WEATHER_API_KEY'] ?? '';
+    _weatherService = WeatherService(apiKey: _weatherApiKey);
     _weather = _fetchWeather();
   }
 
