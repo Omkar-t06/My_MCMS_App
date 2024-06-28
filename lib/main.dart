@@ -6,7 +6,7 @@ import 'package:my_mcms/constants/router.dart';
 import 'package:my_mcms/firebase_options.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/loader.dart';
-import 'package:my_mcms/views/client_views/client_home_view.dart';
+import 'package:my_mcms/views/bottom_nav_bar.dart';
 import 'package:my_mcms/views/login_view.dart';
 import 'package:my_mcms/views/verify_email.dart';
 
@@ -50,7 +50,7 @@ class ViewBuilder extends StatelessWidget {
               if (user.phoneNumber == "" && user.isEmailVerified == false) {
                 return const VerifyEmail();
               } else {
-                return const ClientHomeView();
+                return const BottomNavBar();
               }
             } else {
               return const LoginView();

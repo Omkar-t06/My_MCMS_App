@@ -52,13 +52,13 @@ class _NewsSectionState extends State<NewsSection> {
 
         if (snapshot.hasError) {
           return const Center(
-            child: Text("Error fetching weather data"),
+            child: Text("Error fetching news data"),
           );
         }
 
         if (!snapshot.hasData || snapshot.data?.articles == null) {
           return const Center(
-            child: Text("No weather data available"),
+            child: Text("No news data available"),
           );
         }
 
@@ -67,17 +67,20 @@ class _NewsSectionState extends State<NewsSection> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const TitleText(
-                  data: "Latest News",
-                ),
-                IconButton(
-                  onPressed: _refreshNews,
-                  icon: const Icon(Icons.refresh),
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const TitleText(
+                    data: "Latest News",
+                  ),
+                  IconButton(
+                    onPressed: _refreshNews,
+                    icon: const Icon(Icons.refresh),
+                  )
+                ],
+              ),
             ),
             const Padding(
               padding: EdgeInsets.only(right: 8.0, left: 8.0),

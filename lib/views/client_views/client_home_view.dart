@@ -31,7 +31,7 @@ class ClientHomeView extends StatelessWidget {
               ),
               verticalSpace(15),
               SizedBox(
-                height: height * 0.9,
+                height: height * 0.82,
                 child: const NewsSection(),
               ),
             ],
