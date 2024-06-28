@@ -87,7 +87,7 @@ class _NewsSectionState extends State<NewsSection> {
               child: Divider(
                 height: 0,
                 thickness: 3,
-                color: ColorPalette.background,
+                color: ColorPalette.secondaryBackground,
               ),
             ),
             Flexible(

@@ -71,7 +71,7 @@ class _WeatherSlideState extends State<WeatherSlide> {
 
         return SizedBox(
           child: Card(
-            color: ColorPalette.background,
+            color: ColorPalette.secondaryBackground,
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
