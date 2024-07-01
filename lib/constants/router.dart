@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_mcms/views/auth_view/forgot_password_view.dart';
 import 'package:my_mcms/views/client_views/client_home_view.dart';
-import 'package:my_mcms/views/auth_screen/login_view.dart';
-import 'package:my_mcms/views/auth_screen/registration_view.dart';
-import 'package:my_mcms/views/auth_screen/verify_email.dart';
+import 'package:my_mcms/views/auth_view/login_view.dart';
+import 'package:my_mcms/views/auth_view/registration_view.dart';
+import 'package:my_mcms/views/auth_view/verify_email.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -25,6 +26,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) => const ClientHomeView(),
+      );
+    case ForgotPasswordView.route:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) => const ForgotPasswordView(),
       );
     default:
       return MaterialPageRoute(

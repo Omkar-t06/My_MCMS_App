@@ -6,7 +6,7 @@ import 'package:my_mcms/constants/enums.dart';
 import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/show_log_out_dialog.dart';
-import 'package:my_mcms/views/auth_screen/login_view.dart';
+import 'package:my_mcms/views/auth_view/login_view.dart';
 
 AppBar customAuthAppBar({required String titleText}) {
   return AppBar(

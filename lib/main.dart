@@ -7,8 +7,8 @@ import 'package:my_mcms/firebase_options.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/loader.dart';
 import 'package:my_mcms/views/bottom_nav_bar.dart';
-import 'package:my_mcms/views/auth_screen/login_view.dart';
-import 'package:my_mcms/views/auth_screen/verify_email.dart';
+import 'package:my_mcms/views/auth_view/login_view.dart';
+import 'package:my_mcms/views/auth_view/verify_email.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

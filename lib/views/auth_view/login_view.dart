@@ -8,12 +8,13 @@ import 'package:my_mcms/service/auth/auth_expections.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
 import 'package:my_mcms/utils/widgets/vertical_space.dart';
+import 'package:my_mcms/views/auth_view/forgot_password_view.dart';
 import 'package:my_mcms/views/client_views/client_home_view.dart';
-import 'package:my_mcms/views/auth_screen/registration_view.dart';
+import 'package:my_mcms/views/auth_view/registration_view.dart';
 import 'package:my_mcms/utils/widgets/auth_textfield.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
 import 'package:my_mcms/utils/widgets/title_text.dart';
-import 'package:my_mcms/views/auth_screen/verify_email.dart';
+import 'package:my_mcms/views/auth_view/verify_email.dart';
 
 class LoginView extends StatefulWidget {
   static const String route = '/login';
@@ -208,6 +209,17 @@ class _LoginViewState extends State<LoginView> {
                         style: buttonTextStyle,
                       ),
                     ),
+                    TextButton(
+                        onPressed: () async {
+                          Navigator.pushNamed(
+                            context,
+                            ForgotPasswordView.route,
+                          );
+                        },
+                        child: const Text(
+                          "Forgot Password?",
+                          style: buttonTextStyle,
+                        )),
                   ],
                 ),
               ),

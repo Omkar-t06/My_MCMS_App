@@ -6,14 +6,15 @@ import 'package:my_mcms/constants/enums.dart';
 import 'package:my_mcms/constants/text_style.dart';
 import 'package:my_mcms/service/auth/auth_expections.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
+import 'package:my_mcms/service/cloud/firebase_cloud_storage.dart';
 import 'package:my_mcms/utils/message_widget/show_snackbar.dart';
 import 'package:my_mcms/utils/widgets/vertical_space.dart';
 import 'package:my_mcms/views/client_views/client_home_view.dart';
-import 'package:my_mcms/views/auth_screen/login_view.dart';
+import 'package:my_mcms/views/auth_view/login_view.dart';
 import 'package:my_mcms/utils/widgets/auth_textfield.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
 import 'package:my_mcms/utils/widgets/title_text.dart';
-import 'package:my_mcms/views/auth_screen/verify_email.dart';
+import 'package:my_mcms/views/auth_view/verify_email.dart';
 
 class RegistrationView extends StatefulWidget {
   static const String route = '/registration';
@@ -24,10 +25,18 @@ class RegistrationView extends StatefulWidget {
 }
 
 class _RegistrationViewState extends State<RegistrationView> {
+  late final FirebaseCloudStorage _userService;
   RegistrationOptions _options = RegistrationOptions.phoneNo;
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    _userService = FirebaseCloudStorage();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -104,16 +113,36 @@ class _RegistrationViewState extends State<RegistrationView> {
                 child: Column(
                   children: [
                     if (_options == RegistrationOptions.phoneNo)
-                      IdCredencialTextField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        hintText: 'Enter your phone number',
-                        label: 'Phone Number',
-                        icon: const Icon(Icons.phone),
+                      Column(
+                        children: [
+                          IdCredencialTextField(
+                            controller: _userNameController,
+                            keyboardType: TextInputType.emailAddress,
+                            hintText: 'Enter your name',
+                            label: 'User Name',
+                            icon: const Icon(Icons.abc),
+                          ),
+                          verticalSpace(5),
+                          IdCredencialTextField(
+                            controller: _phoneController,
+                            keyboardType: TextInputType.phone,
+                            hintText: 'Enter your phone number',
+                            label: 'Phone Number',
+                            icon: const Icon(Icons.phone),
+                          ),
+                        ],
                       ),
                     if (_options == RegistrationOptions.email)
                       Column(
                         children: [
+                          IdCredencialTextField(
+                            controller: _userNameController,
+                            keyboardType: TextInputType.emailAddress,
+                            hintText: 'Enter your name',
+                            label: 'User Name',
+                            icon: const Icon(Icons.abc),
+                          ),
+                          verticalSpace(5),
                           IdCredencialTextField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -136,6 +165,15 @@ class _RegistrationViewState extends State<RegistrationView> {
                               password: _passwordController.text,
                             );
                             AuthService.firebase().sendEmailVerification();
+                            final user = AuthService.firebase().currentUser;
+                            if (user != null) {
+                              await _userService.createUserDetails(
+                                uid: user.uid,
+                                userName: _userNameController.text,
+                                address: "",
+                                email: _emailController.text,
+                              );
+                            }
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               VerifyEmail.route,
@@ -167,6 +205,12 @@ class _RegistrationViewState extends State<RegistrationView> {
                                 "Verify with OTP and click Login again",
                               );
                             } else {
+                              await _userService.createUserDetails(
+                                uid: user.uid,
+                                userName: _userNameController.text,
+                                address: "",
+                                email: _phoneController.text,
+                              );
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                 ClientHomeView.route,
                                 (_) => false,
