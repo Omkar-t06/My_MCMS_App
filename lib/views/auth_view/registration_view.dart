@@ -57,7 +57,7 @@ class _RegistrationViewState extends State<RegistrationView> {
     var currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: ColorPalette.background,
-      appBar: customAuthAppBar(titleText: "Registration"),
+      appBar: customAppBar(titleText: "Registration"),
       body: Column(
         children: [
           const TitleText(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
+import 'package:my_mcms/utils/widgets/custom_drawer.dart';
 
 class ComplaintInfoView extends StatelessWidget {
   const ComplaintInfoView({super.key});
@@ -7,7 +8,10 @@ class ComplaintInfoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customViewAppBar(titleText: 'Complaints Info', context: context),
+      appBar: customAppBar(
+        titleText: 'Complaints Info',
+      ),
+      drawer: const CustomDrawer(),
     );
   }
 }

@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
     var currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: ColorPalette.background,
-      appBar: customAuthAppBar(titleText: "Login"),
+      appBar: customAppBar(titleText: "Login"),
       body: Column(
         children: [
           const Column(

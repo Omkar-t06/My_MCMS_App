@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_mcms/service/auth/auth_service.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
-import 'package:my_mcms/utils/widgets/title_text.dart';
 import 'package:my_mcms/utils/widgets/vertical_space.dart';
 
 class ForgotPasswordView extends StatefulWidget {
@@ -24,7 +23,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAuthAppBar(titleText: "Forgot Password"),
+      appBar: customAppBar(titleText: "Forgot Password"),
       body: Column(
         children: [
           const Text(

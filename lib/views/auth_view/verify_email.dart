@@ -21,7 +21,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAuthAppBar(titleText: "Verify Email"),
+      appBar: customAppBar(titleText: "Verify Email"),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

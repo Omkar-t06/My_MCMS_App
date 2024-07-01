@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
+import 'package:my_mcms/utils/widgets/custom_drawer.dart';
 
 class ClientProfileView extends StatelessWidget {
   const ClientProfileView({super.key});
@@ -7,7 +8,10 @@ class ClientProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customViewAppBar(titleText: 'Profile', context: context),
+      appBar: customAppBar(
+        titleText: 'Profile',
+      ),
+      drawer: const CustomDrawer(),
     );
   }
 }

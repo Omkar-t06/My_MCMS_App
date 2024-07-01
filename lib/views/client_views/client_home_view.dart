@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_mcms/utils/widgets/custom_appbar.dart';
+import 'package:my_mcms/utils/widgets/custom_drawer.dart';
 import 'package:my_mcms/utils/widgets/title_text.dart';
 import 'package:my_mcms/utils/widgets/vertical_space.dart';
-import 'package:my_mcms/views/client_views/widgets/news_utils/news_section.dart';
-import 'package:my_mcms/views/client_views/widgets/weather_utils/weather_slides.dart';
 
 class ClientHomeView extends StatelessWidget {
   static const String route = '/client-home';
@@ -11,12 +10,12 @@ class ClientHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    // final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: customViewAppBar(
+      appBar: customAppBar(
         titleText: 'Home Page',
-        context: context,
       ),
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: SizedBox(
           child: Column(
@@ -25,15 +24,15 @@ class ClientHomeView extends StatelessWidget {
                 data: "Welcome to the Muncipal Council Complaint System",
               ),
               verticalSpace(15),
-              SizedBox(
-                height: height * 0.25,
-                child: const WeatherSlide(),
-              ),
+              // SizedBox(
+              //   height: height * 0.25,
+              //   child: const WeatherSlide(),
+              // ),
               verticalSpace(15),
-              SizedBox(
-                height: height * 0.82,
-                child: const NewsSection(),
-              ),
+              // SizedBox(
+              //   height: height * 0.82,
+              //   child: const NewsSection(),
+              // ),
             ],
           ),
         ),
